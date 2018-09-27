@@ -14,6 +14,7 @@ try:
     from urllib import quote  # Python 2
 except ImportError:
     from urllib.parse import quote  # Python 3
+import uuid
 
 from .tcex_argparser import TcExArgParser
 
@@ -503,10 +504,11 @@ class TcEx(object):
             'Timestamp': str(timestamp)
         }
 
-    def batch(self, owner, action=None, attribute_write_type=None, halt_on_error=False):
+    def batch(self, owner, action=None, attribute_write_type=None, halt_on_error=False,
+              shelf_suffix=str(uuid.uuid4())):
         """Return instance of Batch"""
         from .tcex_batch_v2 import TcExBatch
-        return TcExBatch(self, owner, action, attribute_write_type, halt_on_error)
+        return TcExBatch(self, owner, action, attribute_write_type, halt_on_error, shelf_suffix=shelf_suffix)
 
     def bulk_enabled(self, owner=None, api_path=None, authorization=None):
         """[Deprecated] Check if bulk indicators is enabled for owner.
