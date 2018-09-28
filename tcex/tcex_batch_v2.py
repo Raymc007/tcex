@@ -49,7 +49,7 @@ class TcExBatch(object):
     """ThreatConnect Batch Import Module"""
 
     def __init__(self, tcex, owner, action=None, attribute_write_type=None, halt_on_error=True,
-                 playbook_triggers_enabled=False, shelf_suffix=str(uuid.uuid4())):
+                 playbook_triggers_enabled=False):
         """Initialize Class Properties.
 
         Args:
@@ -59,7 +59,6 @@ class TcExBatch(object):
             attribute_write_type (str, default:Replace): Write type for Indicator attributes
                 ['Append', 'Replace'].
             halt_on_error (bool, default:True): If True any batch error will halt the batch job.
-            shelf_suffix (str, default:str(uuid.uuid4())): Suffix for the shelf files.
         """
         self.tcex = tcex
         self._action = action or 'Create'
@@ -68,7 +67,7 @@ class TcExBatch(object):
         self._halt_on_error = halt_on_error
         self._owner = owner
         self._playbook_triggers_enabled = playbook_triggers_enabled
-        self._shelf_suffix = shelf_suffix
+        self._shelf_suffix = str(uuid.uuid4())
 
         # shelf settings
         self._group_shelf_fqfn = None
@@ -1212,6 +1211,11 @@ class TcExBatch(object):
     def shelf_suffix(self):
         """Return the shelf suffix."""
         return self._shelf_suffix
+
+    @shelf_suffix.setter
+    def shelf_suffix(self, suffix):
+        """Set the shelf suffix."""
+        self._shelf_suffix = suffix
 
     def signature(self, name, file_name, file_type, file_text, xid=True):
         """Add Signature data to Batch object.
